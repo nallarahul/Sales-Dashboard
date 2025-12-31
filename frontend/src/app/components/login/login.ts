@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth'; // <-- Adjusted import path
 
 @Component({
   selector: 'app-login',
@@ -12,21 +12,28 @@ import { AuthService } from '../../services/auth'; // <-- Adjusted import path
   styleUrls: ['./login.css']
 })
 export class Login {
-  email = '';
-  password = '';
+  credentials = { email: '', password: '' };
   errorMessage = '';
+  
+  // --- FIX: Add this missing variable ---
+  loading = false; 
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) {}
 
   onLogin() {
-    const credentials = { email: this.email, password: this.password };
-    
-    this.authService.login(credentials).subscribe({
-      next: (res) => {
-        console.log('Login Success:', res);
-        this.router.navigate(['/dashboard']); 
+    // 1. Start loading state (disables button)
+    this.loading = true; 
+    this.errorMessage = '';
+
+    this.auth.login(this.credentials).subscribe({
+      next: () => {
+        // Login successful - Router will redirect to dashboard
+        // We don't set loading = false here because we want it to stay disabled while navigating
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
+        // 2. Stop loading state on error so user can try again
+        this.loading = false; 
         console.error('Login Failed', err);
         this.errorMessage = 'Invalid email or password';
       }

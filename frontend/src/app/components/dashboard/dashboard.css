@@ -1,36 +1,162 @@
-/* Animation Keyframes */
-@keyframes slideUpFade {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* --- Variables matching Login Theme --- */
+:root {
+    --cyan-primary: #2bd1d1;
+    --cyan-dark: #24c6c6;
+    --cyan-light: #e0fbfb;
+    --bg-soft: #f4fcfc;
 }
 
-/* Apply to Cards with staggered delays */
+/* Global Background override for dashboard */
+:host {
+    display: block;
+    background-color: var(--bg-soft);
+    min-height: 100vh;
+}
+
+/* --- Animations --- */
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .card {
     animation: slideUpFade 0.8s ease-out forwards;
-    opacity: 0; /* Start hidden */
+    opacity: 0;
 }
 
-/* Stagger the animations so they don't all appear at once */
 .col-md-3:nth-child(1) .card { animation-delay: 0.1s; }
 .col-md-3:nth-child(2) .card { animation-delay: 0.2s; }
 .col-md-3:nth-child(3) .card { animation-delay: 0.3s; }
 .col-md-3:nth-child(4) .card { animation-delay: 0.4s; }
+.col-md-8 .card, .col-md-4 .card { animation-delay: 0.6s; }
 
-/* The Charts container */
-.col-md-8 .card, .col-md-4 .card {
-    animation-delay: 0.6s;
+/* --- Navbar Styling --- */
+/* --- Navbar Styling Refined --- */
+
+.custom-navbar {
+    /* 1. Match the card background */
+    background-color: #ffffff !important;
+    
+    /* 2. Add the Cyan Border (Same as Cards) */
+    border: 2px solid #ececec !important;
+    
+    /* 3. Add the Cyan Glow/Shadow */
+    box-shadow: 0 4px 20px rgba(43, 209, 209, 0.1) !important;
+    
+    /* 4. Ensure spacing is correct */
+    width: 85%;
+    margin: 20px auto; /* Centers it and gives top spacing */
+    z-index: 1000;
 }
 
-.navbar-custom-width{
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 2%;
-    border: 1px solid #bdbdbd;
+/* Ensure the Brand Text is Cyan */
+.navbar-brand {
+    color: #2bd1d1; /* Cyan Text */
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+}
+
+/* Hover Effect for Logout Button */
+.btn-outline-cyan {
+    color: #2bd1d1;
+    border: 2px solid #2bd1d1;
+    padding: 5px 20px;
+}
+
+.btn-outline-cyan:hover {
+    background-color: #2bd1d1;
+    color: white;
+    box-shadow: 0 4px 10px rgba(43, 209, 209, 0.3);
+}
+
+.text-cyan { color: var(--cyan-primary) !important; }
+.bg-cyan { background-color: var(--cyan-primary) !important; }
+.bg-cyan-light { background-color: var(--cyan-light) !important; }
+
+/* --- Card Styles --- */
+.shadow-soft {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+.fs-7 { font-size: 0.75rem; }
+.ls-1 { letter-spacing: 1px; }
+
+/* --- Table Styles --- */
+.custom-table th {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.border-bottom-light {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--cyan-light);
+}
+
+/* --- Badge Styling (Subtle) --- */
+.bg-danger-subtle { background-color: #fde8e8 !important; }
+.bg-primary-subtle { background-color: #e3f2fd !important; }
+.bg-secondary-subtle { background-color: #f3f4f6 !important; }
+
+/* --- Button Styling --- */
+.btn-icon-danger {
+    color: #dc3545;
+    border: 1px solid #fee2e2;
+    background: white;
+    transition: all 0.2s;
+}
+
+.btn-icon-danger:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* --- Global Color Variables --- */
+:root {
+    --cyan-primary: #2bd1d1;
+    --cyan-light: #e0fbfb;
+}
+
+/* --- Card Base Styling --- */
+.card-stat {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(43, 209, 209, 0.1); /* Very clean, light shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Clean Left Border Accent */
+    border: 2px solid #ececec !important;
+    transition: all 0.3s ease;
+}
+
+/* Hover Effect: Lift up slightly */
+.card-stat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(43, 209, 209, 0.25); /* Subtle cyan glow */
+    border-color: #24c6c6 !important;
+}
+
+/* --- Typography --- */
+.fs-7 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #8898aa !important; /* Cool grey text */
+}
+
+/* --- Icon Box Styling --- */
+.icon-box {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Uses the cyan light background defined in variables */
+    background-color: var(--cyan-light) !important; 
+    color: var(--cyan-primary) !important;
+}
+
+/* Ensure Icons are centered nicely */
+.icon-box i {
+    line-height: 0;
 }
