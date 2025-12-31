@@ -6,23 +6,28 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  // Ensure this matches your backend port
   private baseUrl = 'http://localhost:5000/api';
 
   constructor(private http: HttpClient) { }
 
-  // Fetch Dashboard Data (Protected Route)
+  // 1. Existing Dashboard call
   getDashboardStats(): Observable<any> {
-    // 1. Get the token we saved during login
     const token = localStorage.getItem('token');
-    
-    // 2. Create the header with "Bearer <token>"
-    // This is what your backend 'protect' middleware looks for
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    // 3. Send the GET request with the headers
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
     return this.http.get<any>(`${this.baseUrl}/analytics/dashboard`, { headers });
+  }
+
+  // 2. NEW: Get All Users
+  getAllUsers(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    return this.http.get<any>(`${this.baseUrl}/auth/users`, { headers });
+  }
+
+  // 3. NEW: Delete a User
+  deleteUser(userId: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    return this.http.delete<any>(`${this.baseUrl}/auth/users/${userId}`, { headers });
   }
 }

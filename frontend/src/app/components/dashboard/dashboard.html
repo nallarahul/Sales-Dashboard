@@ -1,14 +1,12 @@
-<nav class="navbar navbar-dark bg-dark px-4">
-  <a class="navbar-brand" href="#">SmartWinnr Admin</a>
-  <button class="btn btn-outline-light btn-sm" (click)="logout()">Logout</button>
+<nav class="navbar navbar-dark bg-dark px-4 shadow-sm sticky-top">
+  <a class="navbar-brand fw-bold" href="#">SmartWinnr Admin</a>
+  <button class="btn btn-outline-danger btn-sm" (click)="logout()">Logout</button>
 </nav>
 
-<div class="container mt-4">
+<div class="container mt-4 pb-5">
   
   <div *ngIf="!isDataLoaded" class="text-center mt-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
+    <div class="spinner-border text-primary" role="status"></div>
     <p class="mt-2 text-muted">Fetching Analytics...</p>
   </div>
 
@@ -16,43 +14,43 @@
     
     <div class="row mb-4">
       <div class="col-md-3">
-        <div class="card text-white bg-primary mb-3">
+        <div class="card text-white bg-primary mb-3 h-100 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Total Users</h5>
-            <p class="card-text display-6">{{ summaryData.totalUsers }}</p>
+            <h5 class="card-title opacity-75">Total Users</h5>
+            <p class="card-text display-6 fw-bold">{{ summaryData.totalUsers }}</p>
           </div>
         </div>
       </div>
       <div class="col-md-3">
-        <div class="card text-white bg-success mb-3">
+        <div class="card text-white bg-success mb-3 h-100 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Revenue (YTD)</h5>
-            <p class="card-text display-6">${{ summaryData.totalRevenue | number }}</p>
+            <h5 class="card-title opacity-75">Revenue (YTD)</h5>
+            <p class="card-text display-6 fw-bold">${{ summaryData.totalRevenue | number }}</p>
           </div>
         </div>
       </div>
       <div class="col-md-3">
-        <div class="card text-white bg-warning mb-3">
+        <div class="card text-white bg-warning mb-3 h-100 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Active Reps</h5>
-            <p class="card-text display-6">{{ summaryData.activeReps }}</p>
+            <h5 class="card-title opacity-75">Active Reps</h5>
+            <p class="card-text display-6 fw-bold text-dark">{{ summaryData.activeReps }}</p>
           </div>
         </div>
       </div>
       <div class="col-md-3">
-        <div class="card text-white bg-info mb-3">
+        <div class="card text-white bg-info mb-3 h-100 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Last Month</h5>
-            <p class="card-text display-6">${{ summaryData.latestMonthRevenue | number }}</p>
+            <h5 class="card-title opacity-75">Last Month</h5>
+            <p class="card-text display-6 fw-bold text-dark">${{ summaryData.latestMonthRevenue | number }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-5">
       <div class="col-md-8 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header">Revenue Trend</div>
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-white fw-bold py-3">Revenue Trend</div>
           <div class="card-body" style="height: 400px;">
             <canvas baseChart
               [data]="lineChartData"
@@ -65,8 +63,8 @@
       </div>
 
       <div class="col-md-4 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header">Deals Closed</div>
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-white fw-bold py-3">Deals Closed</div>
           <div class="card-body" style="height: 400px;">
             <canvas baseChart
               [data]="barChartData"
@@ -78,4 +76,57 @@
       </div>
     </div>
 
-  </div> </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <span class="fw-bold fs-5">User Management</span>
+            <span class="badge bg-secondary">{{ users.length }} Users</span>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                  <tr>
+                    <th class="ps-4">Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                    <th class="text-end pe-4">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let user of users" class="border-bottom">
+                    <td class="ps-4 fw-bold">{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                      <span class="badge" 
+                        [ngClass]="user.role === 'admin' ? 'bg-primary' : 'bg-secondary'">
+                        {{ user.role | titlecase }}
+                      </span>
+                    </td>
+                    <td>{{ user.createdAt | date:'mediumDate' }}</td>
+                    <td class="text-end pe-4">
+                      <button 
+                        class="btn btn-sm btn-outline-danger"
+                        (click)="deleteUser(user._id)"
+                        [disabled]="user.role === 'admin'">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="users.length === 0">
+                    <td colspan="5" class="text-center py-4 text-muted">
+                      No users found.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
