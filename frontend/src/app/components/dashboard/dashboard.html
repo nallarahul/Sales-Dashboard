@@ -1,0 +1,81 @@
+<nav class="navbar navbar-dark bg-dark px-4">
+  <a class="navbar-brand" href="#">SmartWinnr Admin</a>
+  <button class="btn btn-outline-light btn-sm" (click)="logout()">Logout</button>
+</nav>
+
+<div class="container mt-4">
+  
+  <div *ngIf="!isDataLoaded" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2 text-muted">Fetching Analytics...</p>
+  </div>
+
+  <div *ngIf="isDataLoaded">
+    
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Total Users</h5>
+            <p class="card-text display-6">{{ summaryData.totalUsers }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Revenue (YTD)</h5>
+            <p class="card-text display-6">${{ summaryData.totalRevenue | number }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Active Reps</h5>
+            <p class="card-text display-6">{{ summaryData.activeReps }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Last Month</h5>
+            <p class="card-text display-6">${{ summaryData.latestMonthRevenue | number }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header">Revenue Trend</div>
+          <div class="card-body" style="height: 400px;">
+            <canvas baseChart
+              [data]="lineChartData"
+              [options]="lineChartOptions"
+              [type]="'line'"
+              [legend]="lineChartLegend">
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header">Deals Closed</div>
+          <div class="card-body" style="height: 400px;">
+            <canvas baseChart
+              [data]="barChartData"
+              [options]="barChartOptions"
+              [type]="'bar'">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> </div>
