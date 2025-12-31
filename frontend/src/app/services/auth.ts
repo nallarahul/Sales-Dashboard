@@ -10,47 +10,52 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
   private apiUrl = 'http://localhost:5000/api/auth';
   
-  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  // Track login state by checking if a token exists
+  private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  private hasToken(): boolean {
-    return localStorage.getItem('isLoggedIn') === 'true';
-  }
-
+  // --- LOGIN ---
   login(credentials: any) {
-    return this.http.post<any>(`${this.apiUrl}/login`, credentials, { withCredentials: true }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap(res => {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('role', res.role);
-        this.loggedIn.next(true);
+        // We expect { token: "..." } from the server now
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('role', res.role);
+          this.loggedIn.next(true);
+        }
       })
     );
   }
 
-  register(userData: any) {
-    return this.http.post<any>(`${this.apiUrl}/register`, userData, { withCredentials: true }).pipe(
-      tap(res => {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('role', res.role);
-        this.loggedIn.next(true);
-      })
-    );
-  }
-
+  // --- LOGOUT ---
   logout() {
-    return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe(() => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('role');
-      this.loggedIn.next(false);
-      this.router.navigate(['/login']);
+    // Notify backend (optional)
+    this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
+      next: () => console.log('Backend notified'),
+      error: (err) => console.warn('Logout warning', err),
+      complete: () => {
+        localStorage.clear(); // Remove token
+        this.loggedIn.next(false);
+        this.router.navigate(['/login']);
+      }
     });
   }
 
+  // --- HELPER METHODS ---
+  
+  // 1. Used by Auth Guard
   isLoggedIn() {
     return this.loggedIn.asObservable();
   }
 
+  // 2. Used by ApiService (THIS WAS MISSING!)
+  getToken() {
+    return localStorage.getItem('token');
+  }
+
+  // 3. Used by UI
   getUserRole() {
     return localStorage.getItem('role');
   }

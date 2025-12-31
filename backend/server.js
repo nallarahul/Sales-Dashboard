@@ -5,7 +5,6 @@ const morgan = require('morgan');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const analyticsRoutes = require('./routes/analytics');
-const cookieParser = require('cookie-parser');
 
 // Load env vars
 dotenv.config();
@@ -17,10 +16,8 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // Body parser
-app.use(cookieParser());
 app.use(cors({
   origin: 'http://localhost:4200',
-  credentials: true 
 }));
 
 // Logging (only in dev mode) - Shows you know how to distinguish environments
