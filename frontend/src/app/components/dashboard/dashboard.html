@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark bg-dark px-4 shadow-sm sticky-top">
+<nav class="navbar navbar-light custom-navbar rounded-pill px-4 shadow-sm fixed navbar-custom-width">
   <a class="navbar-brand fw-bold" href="#">SmartWinnr Admin</a>
   <button class="btn btn-outline-danger btn-sm" (click)="logout()">Logout</button>
 </nav>
@@ -16,7 +16,7 @@
       <div class="col-md-3">
         <div class="card text-white bg-primary mb-3 h-100 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title opacity-75">Total Users</h5>
+            <h5 class="card-title">Total Users</h5>
             <p class="card-text display-6 fw-bold">{{ summaryData.totalUsers }}</p>
           </div>
         </div>
@@ -24,7 +24,7 @@
       <div class="col-md-3">
         <div class="card text-white bg-success mb-3 h-100 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title opacity-75">Revenue (YTD)</h5>
+            <h5 class="card-title">Revenue (YTD)</h5>
             <p class="card-text display-6 fw-bold">${{ summaryData.totalRevenue | number }}</p>
           </div>
         </div>
@@ -32,7 +32,7 @@
       <div class="col-md-3">
         <div class="card text-white bg-warning mb-3 h-100 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title opacity-75">Active Reps</h5>
+            <h5 class="card-title text-dark">Active Reps</h5>
             <p class="card-text display-6 fw-bold text-dark">{{ summaryData.activeReps }}</p>
           </div>
         </div>
@@ -40,7 +40,7 @@
       <div class="col-md-3">
         <div class="card text-white bg-info mb-3 h-100 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title opacity-75">Last Month</h5>
+            <h5 class="card-title text-dark">Last Month</h5>
             <p class="card-text display-6 fw-bold text-dark">${{ summaryData.latestMonthRevenue | number }}</p>
           </div>
         </div>
@@ -97,11 +97,15 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let user of users" class="border-bottom">
-                    <td class="ps-4 fw-bold">{{ user.name }}</td>
+                    <td class="ps-4 fw">{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>
                       <span class="badge" 
-                        [ngClass]="user.role === 'admin' ? 'bg-primary' : 'bg-secondary'">
+                        [ngClass]="{
+                              'bg-danger': user.role === 'admin',
+                              'bg-success': user.role === 'manager',
+                              'bg-secondary': user.role === 'sales_rep'
+                      }">
                         {{ user.role | titlecase }}
                       </span>
                     </td>
